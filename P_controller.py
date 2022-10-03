@@ -13,9 +13,9 @@ class P_controller:
         self.robot = robot  # do not delete this line
         #k constants - for 3 iterations
         #        KP  KB  KA
-        #    1	2	-10	  10 - Does not meet Strong Stability -
-        #    2	2	-10	  18 - Meets Strong Stability
-        #    3	.5	-8	  14 - Does not meet Strong Stability
+        #    1  2   -10   10 - Does not meet Strong Stability -
+        #    2  2   -10   18 - Meets Strong Stability
+        #    3  .5  -8    14 - Does not meet Strong Stability
         #    4  5   -.5   14 - Meets Strong Stability
         #    5  1   -5    5 - Meets Strong Stability
 
@@ -126,7 +126,7 @@ class P_controller:
 
         threshold = 3 # threshold constant for directoin
         radsthreshold = 0.14 # threshold constant for oreitnation (0.14 rads = 8 degrees)
-        if abs(deltaX) <threshold and  abs(deltaY) <threshold and abs(c_theta - d_theta)<radsthreshold  or self.counter > 200: #you need to modify the reach way point criteria
+        if (abs(rho) <threshold and abs(c_theta - d_theta)<radsthreshold) or(self.counter > 200  and  abs(rho) <threshold): #you need to modify the reach way point criteria
             if(self.robot.state_des.reach_destination()):
                 print("final goal reached")
                 self.robot.set_motor_control(.0, .0)  # stop the motor
@@ -157,4 +157,6 @@ def subAngle(angle1,angle2):
     a = angle1 - angle2
     a = normalizeAngle(a)
     return a
+
+
 
