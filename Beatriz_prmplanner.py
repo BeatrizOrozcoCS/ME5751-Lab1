@@ -192,7 +192,7 @@ class path_planner:
             # get another random point and make sure that it does collide with with a precdeing line (no loops)
             # encourage path getting closer to the goal point by using brush fire distance cost 
             while True:
-                r=10
+                r=100
                 hit_obstacle = True
                 while (hit_obstacle == True): #continue finding a random point that does not collide with obstacle
                     ri = random.randint(random_node.map_i-r,random_node.map_i + r)
@@ -235,17 +235,29 @@ class path_planner:
                         try:
                             if(self.costmap.costmap[p[0]][p[1]]) == 0: #depends on how you set the value of obstacle
                                 hit_obstacle = True
+                                
                                 #self.path.add_pose(Pose(map_i=p[0],map_j=p[1],theta=0))
                                 #print("we hit an obstacle",count)
                                 # print ("From %d, %d to %d, %d we hit obstalce"%(self.start_node.map_i,self.start_node.map_j,ri,rj))
                                 break
                             else:
                                 #self.path.add_pose(Pose(map_i=p[0],map_j=p[1],theta=0))
+                                if(self.check_vicinity(self.goal_node.map_i,self.goal_node.map_j,p[0],p[1],5.0)): #checks if line path is within end
+                                    ri = p[0]
+                                    rj=p[1]
+                                    
                                 hit_obstacle = False
                         except IndexError:
                             hit_obstacle = True
-                            
-                                   
+                    
+                             
+                    
+                    #for i in self.pTree.nodes:
+                    #    if [ri,rj] == [i.map_i,i.map_j]:
+                    #        hit_obstale = True
+                    #        break;
+                        
+                             
                     #print(ri,rj)
                     if(hit_obstacle==False):
                         for p in points: #check every point in line
