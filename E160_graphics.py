@@ -7,9 +7,9 @@ from cost_map import *
 
 #Swtich these two lines to choose planner
 
-#from path_planner import *
-from prm_planner import *
-
+#from path_planner import * # a*
+from prm_planner import * # random + bias
+#from Beatriz_prmplanner import * #random no bias
 class E160_graphics:
     def __init__(self, environment):
         self.environment = environment

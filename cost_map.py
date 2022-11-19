@@ -14,7 +14,7 @@ class cost_map:
         self.map_width = int(self.graphics.environment.width*self.graphics.scale)
         self.map_height = int(self.graphics.environment.height*self.graphics.scale)
         try:
-            self.load_map(map = "maps/maze1.png") #load map
+            self.load_map(map = "maps/testmap_maze2.png") #load map
             #4 maps
             # office
             #roadmap

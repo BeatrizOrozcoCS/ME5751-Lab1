@@ -3,6 +3,7 @@ import numpy as np
 import math
 import random
 from PIL import Image, ImageTk
+import time
 
 from Path import *
 # from Queue import Queue
@@ -129,7 +130,7 @@ class path_planner:
     def plan_path(self):
         #this is the function you are going to work on
 ###############################################################
-
+        st = time.time()
         #first point
         try:
             # get the bfs map
@@ -194,17 +195,17 @@ class path_planner:
                     rj = random.randint(random_node.map_j-r,random_node.map_j + r) # Let's make a random number!
                     tries +=1
                     while ri >= self.map_width or rj >= self.map_height: #make sure its within boundaries
-                        ri = random.randint(self.start_node.map_i-r,self.start_node.map_i + r)
-                        rj = random.randint(self.start_node.map_j-r,self.start_node.map_j + r) # Let's make a random number!
+                        ri = random.randint(random_node.map_i-r,random_node.map_i + r)
+                        rj = random.randint(random_node.map_j-r,random_node.map_j + r) # Let's make a random number!
                         tries +=1
-                        while True:
-                            try:
-                                bfsdistance[ri][rj]
-                                break
-                            except IndexError:
-                                ri = random.randint(self.start_node.map_i-r,self.start_node.map_i + r)
-                                rj = random.randint(self.start_node.map_j-r,self.start_node.map_j + r) # Let's make a random number!
-                                tries +=1
+                        #while True:
+                            #try:
+                                #bfsdistance[ri][rj]
+                                #break
+                            #except IndexError:
+                                #ri = random.randint(random_node.map_i-r,random_node.map_i + r)
+                                #rj = random.randint(random_node.map_j-r,random_node.map_j + r) # Let's make a random number!
+                                #tries +=1
 
 
 #confirm bias with bfs distance
@@ -215,34 +216,44 @@ class path_planner:
                         ri = random.randint(random_node.map_i-r,random_node.map_i + r)
                         rj = random.randint(random_node.map_j-r,random_node.map_j + r) # Let's make a random number!
                         tries +=1
-                        while ri >= self.map_width-5 or rj >= self.map_height-5:
-                            ri = random.randint(self.start_node.map_i-r,self.start_node.map_i + r)
-                            rj = random.randint(self.start_node.map_j-r,self.start_node.map_j + r) # Let's make a random number!   
+                    
+    #restrict possible nodes to within map boundary                    
+                        while ri >= self.map_width or rj >= self.map_height:
+                            ri = random.randint(random_node.map_i-r,random_node.map_i + r)
+                            rj = random.randint(random_node.map_j-r,random_node.map_j + r) # Let's make a random number!   
                             tries +=1
                     #print(bfsdistance[ri][rj])
-                    points = bresenham(random_node.map_i,random_node.map_j,ri,rj) 
+                    points = bresenham(random_node.map_i,random_node.map_j,ri,rj)
+                    
+                    
                     
                     for p in points: #check every point in line 
-                        if(self.costmap.costmap[p[0]][p[1]]) == 0: #depends on how you set the value of obstacle
+                        try:
+                            if(self.costmap.costmap[p[0]][p[1]]) == 0: #depends on how you set the value of obstacle
+                                hit_obstacle = True
+                                #print("we hit an obstacle",count)
+                                # print ("From %d, %d to %d, %d we hit obstalce"%(self.start_node.map_i,self.start_node.map_j,ri,rj))
+                                break
+                            else:
+                                #self.path.add_pose(Pose(map_i=p[0],map_j=p[1],theta=0))
+                                hit_obstacle = False
+                        except IndexError:
                             hit_obstacle = True
-                            #print("we hit an obstacle",count)
-                            # print ("From %d, %d to %d, %d we hit obstalce"%(self.start_node.map_i,self.start_node.map_j,ri,rj))
-                            break
-                        else:
-                            #self.path.add_pose(Pose(map_i=p[0],map_j=p[1],theta=0))
-                            hit_obstacle = False
+                            
                    
                     #print(ri,rj)
                     if(hit_obstacle==False):
                         for p in points: #check every point in line
                             self.path.add_pose(Pose(map_i=p[0],map_j=p[1],theta=0))
                         count +=1
+                        previous_node = random_node
                         random_node = prm_node(ri,rj)
                         self.pTree.add_nodes(random_node)
-                        self.pTree.add_edges(self.start_node,random_node)#add an edge from start node to random node
+                        self.pTree.add_edges(previous_node,random_node)#add an edge from start node to random node
                         break
                     
-                if bfsdistance[ri][rj] < 10:
+                if(self.check_vicinity(self.goal_node.map_i,self.goal_node.map_j,ri,rj,5.0)):
+                #if bfsdistance[ri][rj] < 2:
                     break
                     #if bfsdistance[ri][rj] < 2:
                         #points = bresenham(ri,rj,self.goal_node.map_i,self.goal_node.map_j ) 
@@ -264,6 +275,8 @@ class path_planner:
             #if(self.check_vicinity(self.goal_node.map_i,self.goal_node.map_j,ri,rj,2.0)):
             
             print ("We hit goal!")
+            et = time.time()
+            print("it took ", et-st, "seconds!")
             print("Nodes tried: ", tries)
             print("Overall node path len: ", count)
             
