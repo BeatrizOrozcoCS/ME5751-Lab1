@@ -214,4 +214,3 @@ class cost_map:
         #print(self.vis_map)
         np.savetxt("Log/vismap.txt",self.vis_map)
 
-
