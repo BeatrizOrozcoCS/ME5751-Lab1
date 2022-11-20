@@ -54,12 +54,49 @@ class path_planner:
         self._init_path_img()
         self.path = Path()
         
+        
+        #for cave map
         self.set_start(world_x = .0, world_y = .0)
-        self.set_goal(world_x = 0.0, world_y = 0.0, world_theta = .0)
+        self.set_goal(world_x = 225.0, world_y = -235.0, world_theta = .0)
+        self.plan_path()
+        self._show_path()
+        
+        self.set_goal(world_x = -114.0, world_y = 236.0, world_theta = .0)
+        self.plan_path()
+        self._show_path()
 
-        #self.plan_path()
-        #self._show_path()
+        self.set_goal(world_x = -232.0, world_y = -237.0, world_theta = .0)
+        self.plan_path()
+        self._show_path()
 
+        #for maze map
+#         self.set_start(world_x = .0, world_y = .0)
+#         self.set_goal(world_x = -199.0, world_y = -14.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+#         
+#         self.set_goal(world_x = -212.0, world_y = 40.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+# 
+#         self.set_goal(world_x = 201.0, world_y = 211.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+
+        #for concentric map
+#         self.set_start(world_x = .0, world_y = .0)
+#         self.set_goal(world_x = 9.0, world_y = 228.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+#         
+#         self.set_goal(world_x = 232.0, world_y = -111.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+# 
+#         self.set_goal(world_x = 5.0, world_y = 215.0, world_theta = .0)
+#         self.plan_path()
+#         self._show_path()
+        
     def set_start(self, world_x = 0, world_y = 0, world_theta = 0):
         self.start_state_map = Pose()
         map_i, map_j = self.world2map(world_x,world_y)
@@ -137,7 +174,7 @@ class path_planner:
             bfsdistance = gp_to_sp_bfs(self.costmap.costmap, self.start_node.map_i,self.start_node.map_j,self.goal_node.map_i,self.goal_node.map_j) # (g) manhantann distance from start 
             
             #raious of random points
-            r=100
+            r=50
             #ensure that end point does not lie in obstacle
             if(self.costmap.costmap[self.goal_node.map_i][self.goal_node.map_j]) == 0: #depends on how you set the value of obstacle
                 print("path not possible")
@@ -152,7 +189,7 @@ class path_planner:
                     ri = random.randint(self.start_node.map_i-r,self.start_node.map_i + r)
                     rj = random.randint(self.start_node.map_j-r,self.start_node.map_j + r) # Let's make a random number!
                     tries +=1
-                    while ri >= self.map_width-5 or rj >= self.map_height-5:
+                    while ri >= self.map_width or rj >= self.map_height:
                         ri = random.randint(self.start_node.map_i-r,self.start_node.map_i + r)
                         rj = random.randint(self.start_node.map_j-r,self.start_node.map_j + r) # Let's make a random number!
                         tries +=1
@@ -188,7 +225,7 @@ class path_planner:
             # get another random point and make sure that it does collide with with a precdeing line (no loops)
             # encourage path getting closer to the goal point by using brush fire distance cost 
             while True:
-                r=10
+                r=50
                 hit_obstacle = True
                 while (hit_obstacle == True): #continue finding a random point that does not collide with obstacle
                     ri = random.randint(random_node.map_i-r,random_node.map_i + r)

@@ -27,8 +27,41 @@ class path_planner:
         self._init_path_img()
         self.path = Path()
 
-        self.set_start(world_x=0, world_y=0)
-        self.set_goal(world_x=0.0, world_y=0.0, world_theta=.0)
+# 14 136 (-228,107)
+# 13 141 (-133 103)
+# 149 73 (-167 94)
+# 142 112
+# 91 85   (-173,147)
+# 12 23   (-233,233)
+# 487 18   (-191,-195)
+# 250 250  (0,0)
+
+#         self.set_start(world_x=0, world_y=0)
+#         self.set_goal(world_x=-228, world_y=107)
+        
+        self.set_start(world_x=-228, world_y=107)
+        self.set_goal(world_x=-133, world_y=103)
+        
+        self.set_start(world_x=-133, world_y=103)
+        self.set_goal(world_x=-167, world_y=94)
+        
+        self.set_start(world_x=-167, world_y=94)
+        self.set_goal(world_x=-173, world_y=147)
+        
+        self.set_start(world_x=-173, world_y=147)
+        self.set_goal(world_x=-233, world_y=233)
+        
+        self.set_start(world_x=-191, world_y=-195)
+        self.set_goal(world_x=-0, world_y=0)
+        
+        #self.set_goal(world_x= world2map(map_i=487,map_j = 18)[0], world_y=map2world(map_i=487,map_j = 18)[1], world_theta=.0)
+        
+#         self.set_start(world_x=map2world (487,18)[0], world_y=map2world(487,18)[1])
+#         self.set_goal(world_x=map2world (12,23)[0], world_y=map2world(12,23)[1], world_theta=.0)
+#         
+#         self.set_start(world_x=map2world (12,23)[0], world_y=map2world(12,23)[1])
+#         self.set_goal(world_x=map2world (91,85)[0], world_y=map2world(91,85)[1], world_theta=.0)
+        
 
         #test points for maz
         #self.set_goal(world_x=209.0, world_y=162.0, world_theta=.0) #for point [88,459]
@@ -128,6 +161,7 @@ class path_planner:
             for p in points:
                 self.path.add_pose(Pose(map_i=p[0][0], map_j=p[0][1], theta=0))  # theta is wrong
             print("path length: ",len(points))
+            self._show_path()
             self.path.save_path(file_name="Log\path.csv")
 
 
@@ -412,6 +446,7 @@ def astar(grid, start, end): # Inputs are the NP array, start index, and end ind
                         plan = []
                         while currentN is not None:
                             plan.append([currentN.position])
+                            print(currentN.position)
                             currentN = currentN.parent
                         et = time.time()
                         print("counter: ", counter)

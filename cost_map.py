@@ -14,7 +14,7 @@ class cost_map:
         self.map_width = int(self.graphics.environment.width*self.graphics.scale)
         self.map_height = int(self.graphics.environment.height*self.graphics.scale)
         try:
-            self.load_map(map = "maps/testmap_maze2.png") #load map
+            self.load_map(map = "maps/maze1.png") #load map
             #4 maps
             # office
             #roadmap
@@ -50,7 +50,7 @@ class cost_map:
         self.costmap=np.copy(self.map).astype(np.float)
 
     #save your costmap into a grayscale image
-    def save_vis_map(self,map="maps/testcostmap2.png"):
+    def save_vis_map(self,map="maps/costmap.png"):
         save_img = Image.fromarray(np.uint8(self.costmap))
         save_img.save(map)
 
