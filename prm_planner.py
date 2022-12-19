@@ -174,7 +174,7 @@ class path_planner:
             bfsdistance = gp_to_sp_bfs(self.costmap.costmap, self.start_node.map_i,self.start_node.map_j,self.goal_node.map_i,self.goal_node.map_j) # (g) manhantann distance from start 
             
             #raious of random points
-            r=50
+            r=100
             #ensure that end point does not lie in obstacle
             if(self.costmap.costmap[self.goal_node.map_i][self.goal_node.map_j]) == 0: #depends on how you set the value of obstacle
                 print("path not possible")
@@ -314,7 +314,7 @@ class path_planner:
             print ("We hit goal!")
             et = time.time()
             print("it took ", et-st, "seconds!")
-            print("Nodes tried: ", tries)
+            print("Attempted Nodes: ", tries)
             print("Overall node path len: ", count)
             
             points = bresenham(self.goal_node.map_i,self.goal_node.map_j,ri,rj) 
